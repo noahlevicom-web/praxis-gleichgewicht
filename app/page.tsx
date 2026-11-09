@@ -1,257 +1,318 @@
-"use client";import Image from "next/image";
-import { useState } from "react";
+import Image from "next/image";
+import RevealObserver from "./components/Reveal";
+import MapEmbed from "./components/MapEmbed";
+import { HoursTable, OpenStatus } from "./components/Hours";
+import { PRAXIS, SERVICES, TEAM } from "./components/data";
+import {
+  ChevronIcon,
+  FootIcon,
+  MailIcon,
+  PhoneIcon,
+  PhysioIcon,
+  PinIcon,
+} from "./components/icons";
 
-function MapEmbed() {
-  const [accepted, setAccepted] = useState(false);
+const NAV = [
+  { href: "#leistungen", label: "Leistungen" },
+  { href: "#team", label: "Team" },
+  { href: "#zeiten", label: "Öffnungszeiten" },
+  { href: "#kontakt", label: "Kontakt" },
+];
 
-  if (!accepted) {
-    return (
-      <div className="rounded-2xl border border-gray-100 bg-gray-50 h-64 flex flex-col items-center justify-center gap-4 text-center px-6">
-        <div className="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center text-2xl">
-          🗺️
-        </div>
-        <div>
-          <p className="text-gray-700 font-medium mb-1">Karte anzeigen</p>
-          <p className="text-gray-400 text-sm max-w-sm">
-            Mit dem Klick auf "Karte laden" stimmen Sie der Übertragung von Daten an Google Maps zu.
-          </p>
-        </div>
-        <button
-          onClick={() => setAccepted(true)}
-          className="bg-teal-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-teal-700 transition-colors"
-        >
-          Karte laden
-        </button>
-      </div>
-    );
-  }
-
+function SectionHead({
+  eyebrow,
+  title,
+  sub,
+  dark = false,
+}: {
+  eyebrow: string;
+  title: string;
+  sub?: string;
+  dark?: boolean;
+}) {
   return (
-    <div className="rounded-2xl overflow-hidden border border-gray-100 w-full h-64">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1107.2!2d8.4114162!3d50.7484438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bc6a35066bbf3b%3A0x5bfb57fc94a6acdc!2sEisemrother+Str.+9A%2C+35768+Siegbach!5e0!3m2!1sde!2sde!4v1"
-        width="100%"
-        height="100%"
-        style={{ border: 0 }}
-        allowFullScreen
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-      ></iframe>
+    <div className="reveal mx-auto mb-16 max-w-3xl text-center">
+      <p className={`mb-3 text-[17px] font-semibold ${dark ? "text-mint" : "text-accent"}`}>
+        {eyebrow}
+      </p>
+      <h2 className="text-[40px] leading-[1.08] font-semibold tracking-[-0.02em] text-balance sm:text-[56px]">
+        {title}
+      </h2>
+      {sub && (
+        <p
+          className={`mx-auto mt-5 max-w-[34rem] text-[19px] leading-relaxed text-pretty ${
+            dark ? "text-[#a1a1a6]" : "text-muted"
+          }`}
+        >
+          {sub}
+        </p>
+      )}
     </div>
   );
-}export default function Home() {
+}
+
+export default function Home() {
   return (
-    <main className="min-h-screen font-sans">
+    <>
+      <RevealObserver />
 
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header className="glass fixed inset-x-0 top-0 z-50 border-b border-black/[0.06]">
+        <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+          <a href="#top" className="flex items-center gap-2.5" aria-label="Zur Startseite">
             <Image
-  src="/logo.jpg"
-  alt="Praxis Gleichgewicht Logo"
-  width={40}
-  height={40}
-  className="rounded-full"
-/>
-            <div>
-              <div className="text-teal-600 font-semibold text-sm leading-tight">Praxis Gleichgewicht</div>
-              <div className="text-gray-400 text-xs">Physiotherapie & Podologie</div>
-            </div>
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#leistungen" className="text-gray-600 hover:text-teal-600 text-sm transition-colors">Leistungen</a>
-            <a href="#team" className="text-gray-600 hover:text-teal-600 text-sm transition-colors">Über uns</a>
-            <a href="#oeffnungszeiten" className="text-gray-600 hover:text-teal-600 text-sm transition-colors">Öffnungszeiten</a>
-            <a href="#kontakt" className="text-gray-600 hover:text-teal-600 text-sm transition-colors">Kontakt</a>
-          </div>
-          <a href="tel:027786999340" className="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-teal-700 transition-colors">
-            Termin anfragen
+              src="/logo-mark.png"
+              alt=""
+              width={28}
+              height={28}
+            />
+            <span className="text-[15px] font-semibold tracking-[-0.01em]">{PRAXIS.name}</span>
           </a>
-        </div>
-      </nav>
-
-      {/* Hero */}
-      <section className="bg-teal-600 text-white py-20 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
-          <div className="max-w-lg">
-            <h1 className="text-4xl font-semibold leading-tight mb-4">
-              Ihre Gesundheit<br />in besten Händen
-            </h1>
-            <p className="text-teal-100 text-lg leading-relaxed mb-8">
-              Physiotherapie & Podologie in Siegbach-Oberndorf. Persönliche Betreuung, professionelle Behandlung – wir helfen Ihnen zurück in Balance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a href="tel:027786999340" className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold text-center hover:bg-teal-50 transition-colors">
-                Jetzt anrufen
+          <div className="hidden items-center gap-8 md:flex">
+            {NAV.map((n) => (
+              <a
+                key={n.href}
+                href={n.href}
+                className="text-[13px] text-ink/80 transition-colors hover:text-ink"
+              >
+                {n.label}
               </a>
-              <a href="#leistungen" className="border border-white/60 text-white px-6 py-3 rounded-lg text-center hover:bg-white/10 transition-colors">
-                Leistungen entdecken
-              </a>
-            </div>
-          </div>
-          <div className="bg-white/15 border border-white/30 rounded-2xl p-6 min-w-64">
-            <h3 className="text-white/70 text-xs uppercase tracking-wider mb-4">Öffnungszeiten</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between gap-8">
-                <span className="text-white/70">Montag</span>
-                <span className="text-white">8–12 & 14–18 Uhr</span>
-              </div>
-              <div className="flex justify-between gap-8">
-                <span className="text-white/70">Dienstag</span>
-                <span className="text-white">8–12 & 14–19 Uhr</span>
-              </div>
-              <div className="flex justify-between gap-8">
-                <span className="text-white/70">Mittwoch</span>
-                <span className="text-white">8–12 Uhr</span>
-              </div>
-              <div className="flex justify-between gap-8">
-                <span className="text-white/70">Donnerstag</span>
-                <span className="text-white">8–12 & 14–19 Uhr</span>
-              </div>
-              <div className="flex justify-between gap-8">
-                <span className="text-white/70">Freitag</span>
-                <span className="text-white">8–13 Uhr</span>
-              </div>
-            </div>
-            <div className="border-t border-white/20 mt-4 pt-4 text-sm">
-              <span className="text-white/70">📞 </span>
-              <span className="text-white">02778 6999340</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Leistungen */}
-      <section id="leistungen" className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-2">Unsere Leistungen</h2>
-          <p className="text-gray-400 mb-12">Professionelle Behandlung für Ihr Wohlbefinden</p>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="border border-gray-100 rounded-2xl p-8">
-              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-6">
-                <span className="text-teal-600 text-2xl">🏃</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Physiotherapie</h3>
-              <ul className="space-y-3">
-                {["Krankengymnastik", "Manuelle Lymphdrainage", "Massagetherapie", "… und vieles mehr"].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-gray-600">
-                    <span className="w-2 h-2 rounded-full bg-teal-500 flex-shrink-0"></span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="border border-gray-100 rounded-2xl p-8">
-              <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-6">
-                <span className="text-teal-600 text-2xl">🦶</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Podologie</h3>
-              <ul className="space-y-3">
-                {["Podologische Komplexbehandlung", "Medizinische Fußbehandlung", "… und vieles mehr"].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-gray-600">
-                    <span className="w-2 h-2 rounded-full bg-teal-500 flex-shrink-0"></span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team */}
-      <section id="team" className="py-20 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-2">Ihr Team</h2>
-          <p className="text-gray-400 mb-12">Erfahren, engagiert und immer für Sie da</p>
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              { name: "Dominik Dumbeck", role: "Physiotherapeut & Mitgründer", initials: "DD" },
-              { name: "Torsten Achenbach", role: "Physiotherapeut & Mitgründer", initials: "TA" },
-            ].map((person) => (
-              <div key={person.name} className="bg-white border border-gray-100 rounded-2xl p-6 flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold text-lg flex-shrink-0">
-                  {person.initials}
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800">{person.name}</h4>
-                  <p className="text-gray-400 text-sm mt-1">{person.role}</p>
-                </div>
-              </div>
             ))}
           </div>
-        </div>
-      </section>
+          <a
+            href={PRAXIS.phoneHref}
+            className="rounded-full bg-accent px-4 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-accent-hover"
+          >
+            Anrufen
+          </a>
+        </nav>
+      </header>
 
-      {/* Öffnungszeiten & Kontakt */}
-      <section id="oeffnungszeiten" className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16">
-          <div>
-            <h2 className="text-3xl font-semibold text-gray-800 mb-8">Öffnungszeiten</h2>
-            <div className="space-y-3">
-              {[
-                { tag: "Montag", zeit: "8–12 & 14–18 Uhr" },
-                { tag: "Dienstag", zeit: "8–12 & 14–19 Uhr" },
-                { tag: "Mittwoch", zeit: "8–12 Uhr" },
-                { tag: "Donnerstag", zeit: "8–12 & 14–19 Uhr" },
-                { tag: "Freitag", zeit: "8–13 Uhr" },
-              ].map((row) => (
-                <div key={row.tag} className="flex justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-500">{row.tag}</span>
-                  <span className="text-gray-800 font-medium">{row.zeit}</span>
+      <main id="top">
+        {/* Hero */}
+        <section className="px-4 pt-32 pb-24 sm:px-6 sm:pt-40 sm:pb-32">
+          <div className="mx-auto max-w-5xl text-center">
+            <div className="reveal">
+              <OpenStatus />
+            </div>
+            <h1 className="reveal mt-8 text-[48px] leading-[1.04] font-semibold tracking-[-0.025em] text-balance sm:text-[80px]">
+              Wieder im Gleichgewicht.
+            </h1>
+            <p className="reveal mx-auto mt-6 max-w-[36rem] text-[19px] leading-relaxed text-muted text-pretty sm:text-[21px]">
+              Physiotherapie und Podologie unter einem Dach – mitten in Siegbach-Oberndorf.
+            </p>
+            <div className="reveal mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <a
+                href={PRAXIS.phoneHref}
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-[17px] font-medium text-white transition-colors hover:bg-accent-hover"
+              >
+                <PhoneIcon className="size-5" />
+                Termin vereinbaren
+              </a>
+              <a
+                href="#leistungen"
+                className="group inline-flex items-center gap-1 px-4 py-3.5 text-[17px] text-accent"
+              >
+                Leistungen ansehen
+                <ChevronIcon className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Visual: das Logo erklärt die Praxis */}
+          <div className="reveal mx-auto mt-20 max-w-5xl overflow-hidden rounded-[32px] bg-canvas">
+            <div className="grid grid-cols-2 items-start gap-x-4 gap-y-10 px-6 py-12 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6 md:px-14 md:py-20">
+              <div className="order-2 text-center md:order-1 md:text-right">
+                <p className="text-[21px] font-semibold tracking-[-0.015em] sm:text-[24px]">Podologie</p>
+                <p className="mt-1 text-muted">Für Ihre Füße.</p>
+              </div>
+              <div className="order-1 col-span-2 flex justify-center md:order-2 md:col-span-1">
+                <Image
+                  src="/logo-mark.png"
+                  alt="Logo der Praxis Gleichgewicht: Fuß, Wirbelsäule und G"
+                  width={415}
+                  height={415}
+                  preload
+                  className="size-44 sm:size-56"
+                />
+              </div>
+              <div className="order-3 text-center md:text-left">
+                <p className="text-[21px] font-semibold tracking-[-0.015em] sm:text-[24px]">Physiotherapie</p>
+                <p className="mt-1 text-muted">Für Rücken, Gelenke und Muskeln.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Leistungen */}
+        <section id="leistungen" className="bg-canvas px-4 py-24 sm:px-6 sm:py-36">
+          <div className="mx-auto max-w-5xl">
+            <SectionHead
+              eyebrow="Leistungen"
+              title="Zwei Fachbereiche. Ein Ziel."
+              sub="Dass Sie sich wieder schmerzfrei und sicher bewegen – vom Rücken bis zum Fuß."
+            />
+            <div className="grid gap-6 md:grid-cols-2">
+              {SERVICES.map((s) => (
+                <article
+                  key={s.title}
+                  className="reveal flex flex-col rounded-3xl bg-white p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] sm:p-10"
+                >
+                  <span className="flex size-14 items-center justify-center rounded-2xl bg-mint-soft text-accent">
+                    {s.icon === "physio" ? (
+                      <PhysioIcon className="size-7" />
+                    ) : (
+                      <FootIcon className="size-7" />
+                    )}
+                  </span>
+                  <h3 className="mt-8 text-[28px] font-semibold tracking-[-0.015em]">{s.title}</h3>
+                  <p className="mt-3 leading-relaxed text-muted">{s.text}</p>
+                  <ul className="mt-8 divide-y divide-line/70 border-t border-line/70">
+                    {s.items.map((item) => (
+                      <li key={item} className="py-3.5">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-6 text-[15px] text-muted">
+                    Weitere Leistungen auf Anfrage.
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Team */}
+        <section id="team" className="bg-black px-4 py-24 text-white sm:px-6 sm:py-36">
+          <div className="mx-auto max-w-5xl">
+            <SectionHead
+              dark
+              eyebrow="Über uns"
+              title="Von Therapeuten gegründet."
+              sub="Hinter der Praxis stehen zwei Physiotherapeuten, die sie gemeinsam aufgebaut haben."
+            />
+            <div className="grid gap-6 sm:grid-cols-2">
+              {TEAM.map((p) => (
+                <div
+                  key={p.name}
+                  className="reveal flex flex-col items-center rounded-3xl bg-[#1d1d1f] px-8 py-12 text-center"
+                >
+                  <span className="flex size-24 items-center justify-center rounded-full bg-gradient-to-br from-mint to-accent text-[28px] font-semibold tracking-[-0.01em]">
+                    {p.initials}
+                  </span>
+                  <h3 className="mt-6 text-[24px] font-semibold tracking-[-0.015em]">{p.name}</h3>
+                  <p className="mt-1 text-[#a1a1a6]">{p.role}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div id="kontakt">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-8">Kontakt & Anfahrt</h2>
-            <div className="space-y-4">
-              <a href="tel:027786999340" className="flex items-center gap-4 py-3 border-b border-gray-100 text-gray-600 hover:text-teal-600 transition-colors">
-                <span className="text-xl">📞</span>
-                <span>02778 6999340</span>
-              </a>
-              <a href="mailto:praxis_gleichgewicht@t-online.de" className="flex items-center gap-4 py-3 border-b border-gray-100 text-gray-600 hover:text-teal-600 transition-colors">
-                <span className="text-xl">✉️</span>
-                <span>praxis_gleichgewicht@t-online.de</span>
-              </a>
-              <div className="flex items-center gap-4 py-3 border-b border-gray-100 text-gray-600">
-                <span className="text-xl">📍</span>
-                <span>Eisemrother Straße 9a, 35768 Siegbach-Oberndorf</span>
+        </section>
+
+        {/* Öffnungszeiten */}
+        <section id="zeiten" className="px-4 py-24 sm:px-6 sm:py-36">
+          <div className="mx-auto max-w-5xl">
+            <SectionHead
+              eyebrow="Öffnungszeiten"
+              title="Montag bis Freitag für Sie da."
+              sub="Termine vereinbaren Sie am einfachsten telefonisch."
+            />
+            <div className="reveal mx-auto max-w-xl">
+              <div className="mb-6 flex justify-center">
+                <OpenStatus />
+              </div>
+              <HoursTable />
+            </div>
+          </div>
+        </section>
+
+        {/* Kontakt & Anfahrt */}
+        <section id="kontakt" className="bg-canvas px-4 py-24 sm:px-6 sm:py-36">
+          <div className="mx-auto max-w-5xl">
+            <SectionHead eyebrow="Kontakt" title="So erreichen Sie uns." />
+            <div className="grid gap-6 lg:grid-cols-[2fr_3fr]">
+              <div className="reveal flex flex-col gap-4">
+                {[
+                  {
+                    icon: <PhoneIcon className="size-6" />,
+                    label: "Telefon",
+                    value: PRAXIS.phone,
+                    href: PRAXIS.phoneHref,
+                  },
+                  {
+                    icon: <MailIcon className="size-6" />,
+                    label: "E-Mail",
+                    value: PRAXIS.email,
+                    href: `mailto:${PRAXIS.email}`,
+                  },
+                  {
+                    icon: <PinIcon className="size-6" />,
+                    label: "Adresse",
+                    value: `${PRAXIS.street}, ${PRAXIS.city}`,
+                    href: PRAXIS.mapsLink,
+                  },
+                ].map((c) => (
+                  <a
+                    key={c.label}
+                    href={c.href}
+                    {...(c.label === "Adresse"
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    className="group flex flex-1 items-center gap-5 rounded-3xl bg-white p-6 transition-shadow hover:shadow-[0_10px_40px_rgba(0,0,0,0.08)]"
+                  >
+                    <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-mint-soft text-accent">
+                      {c.icon}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] text-muted">{c.label}</span>
+                      <span className="block font-medium break-words">{c.value}</span>
+                    </span>
+                    <ChevronIcon className="ml-auto size-4 shrink-0 text-subtle transition-transform group-hover:translate-x-0.5" />
+                  </a>
+                ))}
+              </div>
+              <div className="reveal">
+                <MapEmbed />
               </div>
             </div>
           </div>
-        </div>
-      </section>
-{/* Google Maps DSGVO-konform */}
-<div className="mt-16">
-  <h2 className="text-3xl font-semibold text-gray-800 mb-6">Anfahrt</h2>
-  <MapEmbed />
-</div>
-      {/* CTA */}
-      <section className="bg-teal-600 py-16 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="text-2xl font-semibold text-white">Termin vereinbaren</h2>
-            <p className="text-teal-100 mt-2">Rufen Sie uns an oder schreiben Sie uns – wir freuen uns auf Sie!</p>
+        </section>
+
+        {/* Abschluss-CTA */}
+        <section className="px-4 py-24 text-center sm:px-6 sm:py-36">
+          <div className="reveal mx-auto max-w-3xl">
+            <h2 className="text-[40px] leading-[1.08] font-semibold tracking-[-0.02em] sm:text-[56px]">
+              Termin vereinbaren.
+            </h2>
+            <p className="mx-auto mt-5 max-w-md text-[19px] text-muted">
+              Rufen Sie uns an. Wir finden einen Termin, der zu Ihnen passt.
+            </p>
+            <a
+              href={PRAXIS.phoneHref}
+              className="mt-10 inline-block text-[36px] font-semibold tracking-[-0.02em] text-accent tabular-nums transition-colors hover:text-accent-hover sm:text-[48px]"
+            >
+              {PRAXIS.phone}
+            </a>
           </div>
-          <a href="tel:027786999340" className="bg-white text-teal-600 px-8 py-3 rounded-lg font-semibold hover:bg-teal-50 transition-colors whitespace-nowrap">
-            02778 6999340
-          </a>
-        </div>
-      </section>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-teal-800 py-6 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-teal-200 text-sm">© 2025 Praxis Gleichgewicht · Siegbach-Oberndorf</p>
+      <footer className="bg-canvas px-4 py-8 text-[12px] text-muted sm:px-6">
+        <div className="mx-auto flex max-w-5xl flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} {PRAXIS.name} · {PRAXIS.tagline} · Siegbach-Oberndorf
+          </p>
           <div className="flex gap-6">
-            <a href="/impressum" className="text-teal-200 text-sm hover:text-white transition-colors">Impressum</a>
-            <a href="/datenschutz" className="text-teal-200 text-sm hover:text-white transition-colors">Datenschutz</a>
+            <a href="/impressum" className="hover:text-ink">
+              Impressum
+            </a>
+            <a href="/datenschutz" className="hover:text-ink">
+              Datenschutz
+            </a>
           </div>
         </div>
       </footer>
-
-    </main>
+    </>
   );
 }
